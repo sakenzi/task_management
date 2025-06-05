@@ -38,3 +38,17 @@ async def user_register(user: UserRegisterBase, db: AsyncSession):
         access_token=access_token,
         access_token_expire_time=expire_time
     )
+
+async def user_login(email: str, password: str, db: AsyncSession):
+    stmt = await db.execute(select(User).filter(User.email==email))
+    user = stmt.scalar_one_or_none()
+
+    if not user or not verify_password(password, user.password):
+        raise HTTPException(status_code=401, detail="Неверный email или пароль")
+    
+    access_token, expire_time = create_access_token(data={"sub": str(user.id)})
+
+    return TokenResponse(
+        access_token=access_token,
+        access_token_expire_time=expire_time
+    )
