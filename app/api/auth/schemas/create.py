@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 
-class UserBase(BaseModel):
+class UserRegisterBase(BaseModel):
     username: Optional[str] = Field("", max_length=50)
     email: Optional[str] = Field("", max_length=250)
     password: Optional[str] = Field(..., min_length=6)
