@@ -28,3 +28,31 @@ async def get_user_tasks(db: AsyncSession, user_id: int, status: Optional[str], 
     result = await db.execute(stmt)
     return result.scalars().all()
 
+async def update_task(db: AsyncSession, user_id: int, task_id: int, task_data: CreateTask):
+    result = await db.execute(
+        select(Task).where(Task.id == task_id, Task.user_id == user_id)
+    )
+    task = result.scalar_one_or_none()
+    if not task:
+        return None  
+
+    task.title = task_data.title
+    task.description = task_data.description
+    task.status = task_data.status
+    task.due_date = task_data.due_date
+
+    await db.commit()
+    await db.refresh(task)
+    return task
+
+async def delete_task(db: AsyncSession, user_id: int, task_id: int):
+    result = await db.execute(
+        select(Task).where(Task.id == task_id, Task.user_id == user_id)
+    )
+    task = result.scalar_one_or_none()
+    if not task:
+        return False
+
+    await db.delete(task)
+    await db.commit()
+    return True
