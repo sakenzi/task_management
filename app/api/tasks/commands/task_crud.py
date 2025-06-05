@@ -3,6 +3,7 @@ from model.models import Task
 from app.api.tasks.schemas.create import CreateTask
 from sqlalchemy import select, desc, asc
 from typing import Optional
+from datetime import datetime, timezone
 
 
 async def create_tasks(db: AsyncSession, user_id: int, task: CreateTask):
@@ -56,3 +57,21 @@ async def delete_task(db: AsyncSession, user_id: int, task_id: int):
     await db.delete(task)
     await db.commit()
     return True
+
+async def get_user_search_tasks(db: AsyncSession, status: str = None, title: str = None):
+    query = select(Task)
+
+    if status:
+        query = query.where(Task.status == status)
+
+    if title:
+        query = query.where(Task.title.ilike(f"%{title}%"))  
+
+    result = await db.execute(query)
+    tasks = result.scalars().all()
+
+    now = datetime.now(timezone.utc)
+    for task in tasks:
+        task.is_overdue = (task.due_date < now) and (task.status != "done")
+
+    return tasks

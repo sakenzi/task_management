@@ -2,7 +2,7 @@ from fastapi import Depends, APIRouter, Request, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.tasks.schemas.response import TaskResponse, TaskListResponse
 from app.api.tasks.schemas.create import CreateTask
-from app.api.tasks.commands.task_crud import create_tasks, get_user_tasks, update_task, delete_task
+from app.api.tasks.commands.task_crud import create_tasks, get_user_tasks, update_task, delete_task, get_user_search_tasks
 from database.db import get_db
 from utils.context_utils import validate_access_token, get_access_token
 from typing import Optional
@@ -88,3 +88,17 @@ async def delete_task_endpoint(task_id: int, request: Request, db: AsyncSession 
         raise HTTPException(status_code=404, detail="Задача не найдена или доступ запрещен")
 
     return {"message": "Задача успешно удалена"}
+
+@router.get(
+    "/search/tasks", 
+    summary="Поиск по заголовку",
+    response_model=TaskListResponse
+)
+async def list_tasks(
+    status: str = Query(None, description="Фильтр по статусу"),
+    title: str = Query(None, description="Поиск по заголовку"),
+    db: AsyncSession = Depends(get_db),
+):
+    tasks = await get_user_search_tasks(db, status=status, title=title)
+
+    return {"tasks": tasks}
