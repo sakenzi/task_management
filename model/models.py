@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, func, Enum
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, func, Enum, TIMESTAMP
 import enum
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -29,7 +29,7 @@ class Task(Base):
     title = Column(String(250), nullable=False)
     description = Column(Text, nullable=False)
     status = Column(Enum(TaskStatus), default=TaskStatus.new, nullable=False)
-    due_date = Column(DateTime, nullable=False)
+    due_date = Column(TIMESTAMP(timezone=True))
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user_id = Column(Integer, ForeignKey("users.id", ondelete='CASCADE'), nullable=False)
