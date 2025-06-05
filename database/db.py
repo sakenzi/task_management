@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 
 async_engine = create_async_engine(
-    url=settings.DATABASE_url_asyncpg,
+    url=settings.DATABASE_URL_asyncpg,
     echo=False
 )
 
@@ -15,7 +15,7 @@ async_session = async_sessionmaker(
 )
 
 sync_engine = create_engine(
-    url=settings.DATABASE_url_psycopg2,
+    url=settings.DATABASE_URL_psycopg2,
     echo=False
 )
 

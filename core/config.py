@@ -17,18 +17,18 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_USER: str
     DB_NAME: str
-    TOKEN_SEKRET_KEY: str
+    TOKEN_SECRET_KEY: str
 
     TOKEN_ALGORITHM: str = "HS256"
-    TOKEN_EXPIRE_MINUTES: int = 60 * 15
+    TOKEN_EXPIRE_MINUTES: int = 60 * 15  
     DATETIME_FORMAT: str = "%d-%m-%Y %H:%M:%S"
-    
+
     @property
-    def DATABASE_url_asyncpg(self) -> str:
+    def DATABASE_URL_asyncpg(self) -> str:
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
     
     @property
-    def DATABASE_url_psycopg2(self) -> str:
+    def DATABASE_URL_psycopg2(self) -> str:
         return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 settings = Settings()
