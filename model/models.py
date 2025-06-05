@@ -22,7 +22,7 @@ class TaskStatus(str, enum.Enum):
     done = "done"
 
 
-class Tasks(Base):
+class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True)
