@@ -15,7 +15,7 @@ async_session = async_sessionmaker(
 )
 
 sync_engine = create_engine(
-    url=settings.DATABASE_URL_psycopg2,
+    url=settings.DATABASE_url_psycopg2,
     echo=False
 )
 
