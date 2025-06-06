@@ -26,21 +26,31 @@
    ```bash
    pip install -r requirements.txt
    ```
-7. Создайте файл `.env` в корне проекта и добавьте в него переменные:
+7. Создайте базу данных в PostgreSQL с параметрами, указанными в .env (пример команды):
+
+   ```bash
+   CREATE DATABASE task_db;
+   ```
+8. Примените миграции Alembic:
+
+   ```bash
+   alembic upgrade head
+   ```
+9. Создайте файл `.env` в корне проекта и добавьте в него переменные:
 
    ```env
-   DB_HOST=...
-   DB_PORT=...
-   DB_NAME=...
-   DB_USER=...
-   DB_PASS=...
-   TOKEN_SECRET_KEY=...
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=your_user
+   DB_PASS=your_password
+   DB_NAME=task_db
+   TOKEN_SECRET_KEY=your_secret_key
    ```
-8. Запустите проект:
+10. Запустите проект:
 
    ```bash
    python run.py
    ```
-9. Откройте Swagger:
+11. Откройте Swagger:
    [http://localhost:8000/docs](http://localhost:8000/docs)
-10. Готово — тестируйте API!
+12. Готово — тестируйте API!
